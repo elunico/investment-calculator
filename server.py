@@ -1,5 +1,5 @@
 import os.path
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from waitress import serve
 from main import calculate_return, InterestRate, Contribution, TimeUnit, DollarAmount, MONTH, DAY, WEEK, YEAR
 app = Flask(__name__)
@@ -31,10 +31,10 @@ def calculate():
         f = frequency_for(b['frequency'])
         d = int(b['duration'])
     except (KeyError, ValueError, TypeError):
-        return 'Invalid calculation', 400
+        return jsonify({'message': 'Invalid calculation'}), 400
 
     result = calculate_return(p, InterestRate(i), Contribution(c, f), d)
-    return '{}'.format(result)
+    return jsonify({'principle': result.starting, 'interest': result.interest, 'contributions': result.contributed, 'total': result.total})
 
 
 if __name__ == '__main__':

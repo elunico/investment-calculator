@@ -27,7 +27,7 @@ form>select {
   font-size: large;
   display: grid;
   grid-template-columns: 300px 150px;
-  row-gap: 1em;
+  row-gap: 0.5em;
   column-gap: 1em;
 }
 
@@ -41,4 +41,9 @@ form>select {
 
 .text>.second {
   grid-column: 2;
+}
+
+.lower {
+  margin-top: 0.3em;
+  font-size: 1rem;
 }

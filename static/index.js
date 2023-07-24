@@ -1,16 +1,21 @@
 
+let fetching = false;
 let principleElt = document.getElementById('principle');
 let interestElt = document.getElementById('interest');
 let contributionElt = document.getElementById('contribution');
 let frequencyElt = document.getElementById('frequency');
 let durationElt = document.getElementById('duration');
+let r = document.getElementById('result');
+let pr = document.getElementById('presult');
+let cr = document.getElementById('cresult');
+let ir = document.getElementById('iresult');
 
 frequencyElt.selectedIndex = 2;
 
-let fetching = false;
-
 function didInput() {
-  if (fetching) return;
+  if (fetching) {
+    return;
+  };
   fetching = true;
 
   doSubmit();
@@ -18,7 +23,6 @@ function didInput() {
 
 function doSubmit() {
   try {
-    let r = document.getElementById('result');
 
     let principle = principleElt.value;
     let interest = interestElt.value;
@@ -41,15 +45,32 @@ function doSubmit() {
       },
       method: "POST",
       body: JSON.stringify(data)
-    }).then(r => r.text()).then(text => {
-      console.log(r, text);
-      r.textContent = text;
-    }).catch(err => {
-      r.textContent = err;
-    });
+    }).then(r => r.json())
+      .then(json => {
+        if (json.message) {
+          r.textContent = json.message;
+          return;
+        }
+
+        let n = Intl.NumberFormat('en-US', {
+          'currency': 'USD',
+          'maximumFractionDigits': 2,
+          'minimumFractionDigits': 2,
+          'currencyDisplay': 'symbol',
+          'currencySign': 'standard'
+        });
+
+        r.textContent = `$${n.format(json.total)}`;
+        pr.textContent = `$${n.format(json.principle)}`;
+        cr.textContent = `$${n.format(json.contributions)}`;
+        ir.textContent = `$${n.format(json.interest)}`;
+
+      })
+      .catch(err => {
+        console.log(err);
+        r.textContent = err.message;
+      });
   } finally {
     fetching = false;
   }
-
 }
-

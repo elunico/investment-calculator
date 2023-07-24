@@ -117,14 +117,34 @@ class DollarAmount:
         return self.value < other.value
 
 
-def calculate_return(principle: float, rate: InterestRate, contribution: Contribution, years: int, compound_frequency: TimeUnit = MONTH) -> DollarAmount:
+@ordered
+class InvestmentResult:
+    def __init__(self, starting: DollarAmount, contributed: DollarAmount, interest: DollarAmount) -> None:
+        self.starting = starting
+        self.contributed = contributed
+        self.interest = interest
+
+    @property
+    def total(self) -> DollarAmount:
+        return sum([self.starting, self.contributed, self.interest])
+
+    def __lt__(self, other: 'InvestmentResult') -> bool:
+        return self.total < other.total
+
+    def __str__(self) -> str:
+        return '${:.2f}'.format(self.total)
+
+
+def calculate_return(principle: float, rate: InterestRate, contribution: Contribution, years: int, compound_frequency: TimeUnit = MONTH) -> InvestmentResult:
     compound_factor = int(compound_frequency.monthly_conversion_factor * 12)
     balance = principle
     for i in range(years * compound_factor):
         balance = balance * (1 + (rate.value / (compound_factor)))
         balance += (contribution.montly_amount * (12 / compound_factor))
 
-    return DollarAmount.fromfloat(balance)
+    total_added = contribution.montly_amount * years * 12
+
+    return InvestmentResult(principle, total_added, balance - total_added)
 
 
 def unit_for(num):
