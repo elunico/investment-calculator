@@ -1,0 +1,44 @@
+body {
+  font-family: "Helvetica Neue", "Helvetica", "FreeSans", "Free Sans", "Alte Haas Grotesk", "Neue Haas Grotesk Text Pro", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#container {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  row-gap: 10px;
+  column-gap: 1em;
+}
+
+form>label {
+  grid-column: 1;
+}
+
+form>input,
+form>select {
+  grid-column: 2;
+}
+
+.text {
+  margin-top: 1em;
+  font-size: large;
+  display: grid;
+  grid-template-columns: 300px 150px;
+  row-gap: 1em;
+  column-gap: 1em;
+}
+
+#result {
+  font-weight: bold;
+}
+
+.text>.first {
+  grid-column: 1;
+}
+
+.text>.second {
+  grid-column: 2;
+}

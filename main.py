@@ -117,7 +117,7 @@ class DollarAmount:
         return self.value < other.value
 
 
-def calculate_return(principle: float, rate: InterestRate, contribution: Contribution, years: int, compound_frequency: TimeUnit = MONTH) -> float:
+def calculate_return(principle: float, rate: InterestRate, contribution: Contribution, years: int, compound_frequency: TimeUnit = MONTH) -> DollarAmount:
     compound_factor = int(compound_frequency.monthly_conversion_factor * 12)
     balance = principle
     for i in range(years * compound_factor):
@@ -134,6 +134,9 @@ def unit_for(num):
 def run_with_inputs(amount, percent, frequency, contribution, years):
     interest_rate = InterestRate.frompercentage(percent) if percent is not None else None
 
+    starting_amount = float(input("Enter the starting balance: ")) if amount is None else amount
+    interest_rate = InterestRate.frompercentage(float(input("Enter the interest percentage: "))) if interest_rate is None else interest_rate
+
     if frequency is None and contribution is None:
         frequency = unit_for(input('Enter the frequency of contribution (1) daily | (2) weekly | (3) monthly | (4) yearly: '))
         contribution = DollarAmount.fromfloat(float(input("Amount of contributions: ")))
@@ -147,8 +150,6 @@ def run_with_inputs(amount, percent, frequency, contribution, years):
         frequency = unit_for(frequency)
         contribution = DollarAmount.fromfloat(contribution)
 
-    starting_amount = float(input("Enter the starting balance: ")) if amount is None else amount
-    interest_rate = InterestRate.frompercentage(float(input("Enter the interest percentage: "))) if interest_rate is None else interest_rate
     years = int(float(input("Years to allow growth: "))) if years is None else years
 
     print(f'\nAfter {years} years at {interest_rate} starting with {DollarAmount.fromfloat(starting_amount)} and contributing {contribution} every {frequency}, you will have')

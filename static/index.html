@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <title>Investment Calculator</title>
+  <link rel="stylesheet" href="static/index.css">
+</head>
+
+<body>
+  <h1>Investment Calculator</h1>
+
+
+  <form id="container" action="/calculate" method="post">
+    <label for="principle">Principle:</label>
+    <input oninput="didInput()" type="number" name="principle" id="principle">
+    <label for="interest">Interest Rate (percent)</label>
+    <input oninput="didInput()" type="number" name="interest" id="interest">
+    <label for="contribution">Repeated monitary contribution</label>
+    <input oninput="didInput()" type="number" name="contribution" id="contribution">
+    <label for="frequency">Frequency of contribution</label>
+    <select oninput="didInput()" name="frequency" id="frequency">
+      <option value="daily">Daily</option>
+      <option value="weekly">Weekly</option>
+      <option value="monthly">Monthly</option>
+      <option value="yearly">Yearly</option>
+    </select>
+    <label for="duration">Duration of Investment:</label>
+    <input oninput="didInput()" type="number" name="duration" id="duration">
+    <input type="button" value="Submit" onclick="doSubmit()">
+  </form>
+  <div class="text">
+    <span id="builtin" class="first">Your investment will be worth:</span>
+    <span class="emphasis second" id="result">
+
+    </span>
+  </div>
+
+  <script src="static/index.js"></script>
+</body>
+
+</html>
