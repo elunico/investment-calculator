@@ -21,6 +21,8 @@ def ordered(cls):
 @ordered
 class InterestRate:
     def __init__(self, decimal: float):
+        if decimal < 0:
+            raise ValueError("Interest rate cannot be negative in this calculation")
         self.decimal = decimal
 
     @classmethod
@@ -138,13 +140,16 @@ class InvestmentResult:
 def calculate_return(principle: float, rate: InterestRate, contribution: Contribution, years: int, compound_frequency: TimeUnit = MONTH) -> InvestmentResult:
     compound_factor = int(compound_frequency.monthly_conversion_factor * 12)
     balance = principle
-    for i in range(years * compound_factor):
-        balance = balance * (1 + (rate.value / (compound_factor)))
+    interest_total = 0
+    for _ in range(years * compound_factor):
+        interest = balance * ((rate.value / (compound_factor)))
+        interest_total += interest
+        balance += interest
         balance += (contribution.montly_amount * (12 / compound_factor))
 
     total_added = contribution.montly_amount * years * 12
 
-    return InvestmentResult(principle, total_added, balance - total_added)
+    return InvestmentResult(principle, total_added, interest_total)
 
 
 def unit_for(num):

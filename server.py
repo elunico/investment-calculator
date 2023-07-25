@@ -30,10 +30,10 @@ def calculate():
         c = float(b['contribution'])
         f = frequency_for(b['frequency'])
         d = int(b['duration'])
-    except (KeyError, ValueError, TypeError):
-        return jsonify({'message': 'Invalid calculation'}), 400
+        result = calculate_return(p, InterestRate(i), Contribution(c, f), d)
+    except (KeyError, ValueError, TypeError) as e:
+        return jsonify({'message': 'Interest calculation parameters are invalid'}), 400
 
-    result = calculate_return(p, InterestRate(i), Contribution(c, f), d)
     return jsonify({'principle': result.starting, 'interest': result.interest, 'contributions': result.contributed, 'total': result.total})
 
 

@@ -14,6 +14,7 @@ frequencyElt.selectedIndex = 2;
 
 function didInput() {
   if (fetching) {
+    console.log("Debounce! No fetch.");
     return;
   };
   fetching = true;
